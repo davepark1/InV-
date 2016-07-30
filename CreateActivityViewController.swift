@@ -10,17 +10,26 @@ import UIKit
 import Foundation
 
 class CreateActivityViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate {
-    var activity: Event!
+
+    var activity = Event(){
+        didSet{
+            tableView.reloadData()
+            print("UPDATE")
+        }
+    }
+    var time: String!
     
+    @IBOutlet weak var sportSelectionTableView: UITableView!
     @IBOutlet weak var myPicker: UIPickerView!
-    let pickerData = [["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"], ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59"], ["AM", "PM"]]
+    let pickerData = [["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"], ["00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59"], ["AM", "PM"]]
     
-    @IBOutlet weak var sportChoiceTextField: UITextField!
-    @IBOutlet weak var locationChoiceTextField: UITextField!
+
+    @IBOutlet weak var sportChoiceLabel: UILabel!
+    @IBOutlet weak var locationChoiceLabel: UILabel!
+
     @IBOutlet weak var dateChoiceTextField: UITextField!
     @IBOutlet weak var skillLevelChoiceTextField: UITextField!
     @IBOutlet weak var descriptionTextView: UITextView!
-    @IBOutlet weak var addressTextField: UITextField!
     
     enum InvalidEntry: ErrorType{
         case nullSport
@@ -41,10 +50,10 @@ class CreateActivityViewController: UITableViewController, UIPickerViewDataSourc
             if identifier == "Cancel" {
                 print("Cancel button tapped")
             } else if identifier == "Done" {
-                activity = Event()
+                //activity = Event()
                 print("done button tapped")
-                print("sport: \(sportChoiceTextField.text)")
-                print("location: \(locationChoiceTextField.text)")
+                print("sport: \(activity.sport)")
+                print("location: \(activity.location.locationName)")
                 print("date: \(dateChoiceTextField.text)")
                 print("skill level: \(skillLevelChoiceTextField.text)")
                 print("description: \(descriptionTextView.text)")
@@ -69,23 +78,24 @@ class CreateActivityViewController: UITableViewController, UIPickerViewDataSourc
                     return
                     //throw(exception: InvalidEntry.nullSkillLevel)
                 }*/
-                activity!.username = "David Park"
-                activity!.sport = sportChoiceTextField.text
-                activity!.location = locationChoiceTextField.text
-                activity!.time = nil
-                activity!.date = dateChoiceTextField.text
-                activity!.skillLevel = skillLevelChoiceTextField.text
-                activity!.description = descriptionTextView.text
-                //activity = Event(user: "David Park", sport: sportChoiceTextField.text!, location: locationChoiceTextField.text!, time: nil, date: dateChoiceTextField.text!, skillLevel: skillLevelChoiceTextField.text!, description: descriptionTextView.text!)
+                
+                activity.username = "DavidPark"
+                activity.time = time
+                activity.date = dateChoiceTextField.text
+                activity.skillLevel = skillLevelChoiceTextField.text
+                activity.description = descriptionTextView.text
+
                 let activitiesTableViewController = segue.destinationViewController as! ActivitiesTableViewController
                 
-                activitiesTableViewController.activities.append(activity!)
+                activitiesTableViewController.activities.append(activity)
             }
         }
     }
     
     override func viewWillAppear(animated: Bool) {
         descriptionTextView.text = ""
+        sportChoiceLabel.text = activity.sport ?? ""
+        locationChoiceLabel.text = activity.location.locationName ?? ""
     }
     
     override func viewDidLoad() {
@@ -93,6 +103,7 @@ class CreateActivityViewController: UITableViewController, UIPickerViewDataSourc
         // Do any additional setup after loading the view, typically from a nib.
         myPicker.dataSource = self;
         myPicker.delegate = self;
+        updateTime()
     }
 
     override func didReceiveMemoryWarning() {
@@ -101,7 +112,7 @@ class CreateActivityViewController: UITableViewController, UIPickerViewDataSourc
     }
     
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-        pickerData.count
+        return pickerData.count
     }
     
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
@@ -109,12 +120,25 @@ class CreateActivityViewController: UITableViewController, UIPickerViewDataSourc
     }
     
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerData[row]
+        return pickerData[component][row]
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int){
+        updateTime()
+    }
+    
+    func updateTime(){
+        let hour = pickerData[0][myPicker.selectedRowInComponent(0)]
+        let minute = pickerData[1][myPicker.selectedRowInComponent(1)]
+        let timeOfDay = pickerData[2][myPicker.selectedRowInComponent(2)]
+        time = "\(hour):\(minute) \(timeOfDay)"
     }
     
     func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
-        return 200
+        return 50
     }
     
+    @IBAction func unwindToCreateActivitySegue(segue: UIStoryboardSegue){
+    }
 }
 

@@ -17,13 +17,6 @@ class ActivitiesTableViewController: UITableViewController{
         }
     }
     
-    
-    /*var events: [Event]? {
-        didSet{
-            tableView.reloadData()
-        }
-    }*/
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // do stuff here
@@ -34,7 +27,6 @@ class ActivitiesTableViewController: UITableViewController{
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        //return UITableViewCell()
         let cell = tableView.dequeueReusableCellWithIdentifier("myCell", forIndexPath: indexPath) as! ActivityTableViewCell
         
         let row = indexPath.row
@@ -42,8 +34,8 @@ class ActivitiesTableViewController: UITableViewController{
         cell.usernameLabel.text = event.username
         cell.sportChoiceLabel.text = event.sport
         //cell.locationNameLabel.text = event.location.locationName
-        cell.locationNameLabel.text = event.location //delete this after 
-        cell.numPplAttendingLabel.text = event.numPplAttending.description
+        cell.locationNameLabel.text = event.location.locationName
+        cell.numPplAttendingLabel.text = "#: \(event.numPplAttending.description)"
         cell.dateLabel.text = event.date
         cell.timeLabel?.text = event.time
         
@@ -62,8 +54,6 @@ class ActivitiesTableViewController: UITableViewController{
     }
     
     @IBAction func unwindSegue(segue: UIStoryboardSegue){
-        
-        //self.navigationController?.popToRootViewControllerAnimated(true)
     }
 
     override func didReceiveMemoryWarning() {

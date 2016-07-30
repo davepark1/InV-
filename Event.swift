@@ -13,7 +13,7 @@ class Event{
     var username: String!
     var sport: String!
     //var location: Location!
-    var location: String? // delete this for location of type location
+    var location: Location!
     var numPplAttending: Int!
     var usersAttending: [User]? //change this optional
     var attendance: Bool!
@@ -54,7 +54,7 @@ class Event{
     init(){
         self.username = ""
         self.sport = ""
-        self.location = ""
+        self.location = Location()
         self.attendance = true;
         self.numPplAttending = 1;
         self.time = ""

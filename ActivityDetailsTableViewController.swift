@@ -18,18 +18,25 @@ class ActivityDetailsTableViewController: UITableViewController{
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var numPplAttendingLabel: UILabel!
     @IBOutlet weak var locationNameLabel: UILabel!
-    @IBOutlet weak var locationAddressLabel: UILabel? //change optional!!
+    @IBOutlet weak var locationAddressLabel: UILabel!
     @IBOutlet weak var detailsLabel: UITextView!
+    @IBOutlet weak var sportChoiceLabel: UILabel!
+    @IBOutlet weak var locationCityLabel: UILabel!
+    @IBOutlet weak var locationStateLabel: UILabel!
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         if let activity = activity{
+            sportChoiceLabel.text = activity.sport
             usernameLabel.text = activity.username
             skillLevelChoiceLabel.text = activity.skillLevel
             dateLabel.text = activity.date
             timeLabel.text = activity.time ?? ""
             numPplAttendingLabel.text = activity.numPplAttending.description
-            locationNameLabel.text = activity.location
+            locationNameLabel.text = activity.location.locationName
+            locationAddressLabel.text = activity.location.address ?? "Not Available"
+            locationCityLabel.text = activity.location.city
+            locationStateLabel.text = activity.location.state
             detailsLabel.text = activity.description ?? ""
         }
     }
